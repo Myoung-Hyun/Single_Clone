@@ -1,0 +1,18 @@
+library(ggplot2)
+library(plyr)
+library(scales)
+library(zoo)
+
+
+A <- read.csv("timepoint2.csv", header=T)
+
+
+ggplot(A, aes(Time.point, y.name, fill = Apoptotic.ratio)) + 
+  geom_tile(colour = "white") + 
+  facet_grid(Organoids~Drug) + 
+  scale_fill_gradient(low="green", high="red") +
+  labs(x="Time-point (Day)",
+       y="Samples",
+       title = "Time-series Drug Sensitivity", 
+       subtitle="Drug", 
+       fill="Apoptotic.ratio") 

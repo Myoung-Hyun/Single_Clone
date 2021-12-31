@@ -1,0 +1,12 @@
+
+data1<-read.table("SNU4351_normal.txt", header=T, sep="\t", na.strings = "NA")
+data2<-read.table("SNU4351S3_2_TO.txt", header=T, sep="\t", na.strings = "NA")
+shared<-intersect(data1$POS, data2$POS)
+data3<-data2[!(data2$POS %in% shared),]
+data3ln1<-length(data3$POS)
+write.table(data3, "SNU4351S3_2_TO_onlymutation.txt", sep="\t")
+treegene<-as.vector(t(read.table("treegeneset.txt", header=T, sep="\t", na.strings = "NA")))
+list1<-grep(paste(treegene,collapse="$|^"),data3$Gene_Name)
+final1<-data3[sort(as.matrix(list1)),]
+data3lntree1<-length(final1$POS)
+write.table(final1, "SNU4351S1TO_onlymutation_tree.txt", sep="\t")

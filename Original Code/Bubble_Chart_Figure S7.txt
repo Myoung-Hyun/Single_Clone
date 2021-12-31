@@ -1,0 +1,30 @@
+Bubble_Chart_200706
+
+
+bubble <- read.csv("SCVAR2.csv", header = TRUE)
+library(ggplot2)
+library(reshape2)
+
+bubble = melt(bubble, id = c("Gene_Symbol", "Expression"))
+colnames(bubble) <- c("Gene_Symbol", "Expression", "Samples", "log2FC")
+bubble$log2FC <- as.numeric(bubble$log2FC)
+
+
+bubble$Gene_Symbol <- factor(bubble$Gene_Symbol,levels=unique(bubble$Gene_Symbol))
+
+xx = ggplot(bubble, aes(x = Gene_Symbol, y = Samples)) + 
+      geom_point(aes(size = log2FC, fill = Expression), alpha = 2, shape = 21) + 
+       scale_size_continuous(limits = c(0.000001, 10), range = c(0,10), breaks = c(1,2,4,6,8)) + 
+       labs( x= "", y = "", size = "log2FoldChange", fill = "Expression")  + 
+       theme(legend.key=element_blank(), 
+       axis.text.x = element_text(colour = "black", size = 20, face = "bold", angle = 90, vjust = 0.3, hjust = 1), 
+       axis.text.y = element_text(colour = "black", face = "bold", size = 20), 
+       legend.text = element_text(size = 10, face ="bold", colour ="black"), 
+       legend.title = element_text(size = 11, face = "bold"), panel.background = element_blank(), 
+       panel.border = element_rect(colour = "black", fill = NA, size = 1.2), 
+       legend.position = "right", panel.grid.major.y = element_line(colour = "grey95")) +  
+       scale_fill_manual(values = c("#0033FF", "#FF0033"), guide = guide_legend(override.aes = list(size=5))) + 
+       scale_y_discrete(limits = rev(levels(bubble$Samples))) 
+
+
+xx

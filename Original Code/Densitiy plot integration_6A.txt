@@ -1,0 +1,518 @@
+
+
+S1 <- read.table("peri_S1.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S15 <- read.table("peri_S15.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S17 <- read.table("peri_S17.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S2 <- read.table("peri_S2.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S23 <- read.table("peri_S23.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S24 <- read.table("peri_S24.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S3 <- read.table("peri_S3.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S31 <- read.table("peri_S31.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S32 <- read.table("peri_S32.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S37 <- read.table("peri_S37.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S38 <- read.table("peri_S38.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S4 <- read.table("peri_S4.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S41 <- read.table("peri_S41.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S42<- read.table("peri_S42.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S43 <- read.table("peri_S43.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S44 <- read.table("peri_S44.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S45 <- read.table("peri_S45.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S46 <- read.table("peri_S46.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+S47 <- read.table("peri_S47.txt", header = T, stringsAsFactors = FALSE, sep ="\t")
+
+
+S1 <-S1[,1:3]
+S15<-S15[,1:3]
+S17<-S17[,1:3]
+S2 <-S2[,1:3]
+S23<-S23[,1:3]
+S24<-S24[,1:3]
+S3 <-S3[,1:3]
+S31<-S31[,1:3]
+S32<-S32[,1:3]
+S37<-S37[,1:3]
+S38<-S38[,1:3]
+S4 <-S4[,1:3]
+S41<-S41[,1:3]
+S42<-S42[,1:3]
+S43<-S43[,1:3]
+S44<-S44[,1:3]
+S45<-S45[,1:3]
+S46<-S46[,1:3]
+S47<-S47[,1:3]
+
+
+
+S1 <-na.omit(S1)
+S15<-na.omit(S15)
+S17<-na.omit(S17)
+S2 <-na.omit(S2)
+S23<-na.omit(S23)
+S24<-na.omit(S24)
+S3 <-na.omit(S3)
+S31<-na.omit(S31)
+S32<-na.omit(S32)
+S37<-na.omit(S37)
+S38<-na.omit(S38)
+S4 <-na.omit(S4)
+S41<-na.omit(S41)
+S42<-na.omit(S42)
+S43<-na.omit(S43)
+S44<-na.omit(S44)
+S45<-na.omit(S45)
+S46<-na.omit(S46)
+S47<-na.omit(S47)
+
+
+S1_xx <- S1$Area  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S1_dx <- xx[2L] - xx[1L]  ## spacing / bin size
+S1_yy <- d$y  ## 512 density values for `xx`
+S1_C <- sum(S1_yy) * S1_dx  ## sum(S1_yy * S1_dx)
+S1_p.unscaled <- sum(S1_yy[S1_xx >= 5000]) * S1_dx
+S1_p.scaled <- S1_p.unscaled / C
+
+-----------------------------------------------------------
+
+S1_d <- density.default(S1$Area, n = 2048, cut = 3)
+plot(S1_d); abline(v = 1, col = 2)
+S1_xx <- S1_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S1_dx <- S1_xx[2L] - S1_xx[1L]  ## spacing / bin size
+S1_yy <- S1_d$y  ## 512 density values for `xx`
+S1_C <- sum(S1_yy) * S1_dx  ## sum(S1_yy * S1_dx)
+S1_p.unscaled_5000 <- sum(S1_yy[S1_xx >= 5000]) * S1_dx
+S1_p.scaled_5000 <- S1_p.unscaled_5000 / C
+S1_p.unscaled_30000 <- sum(S1_yy[S1_xx >= 30000]) * S1_dx
+S1_p.scaled_30000 <- S1_p.unscaled_30000 / C
+AUC_S1area_5000to30000 <- S1_p.scaled_5000-S1_p.scaled_30000
+
+
+S1peri_d <- density.default(S1$Perimeter, n = 2048, cut = 3)
+plot(S1peri_d); abline(v = 1, col = 2)
+S1peri_xx <- S1peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S1peri_dx <- S1peri_xx[2L] - S1peri_xx[1L]  ## spacing / bin size
+S1peri_yy <- S1peri_d$y  ## 512 density values for `xx`
+S1peri_C <- sum(S1peri_yy) * S1peri_dx  ## sum(S1peri_yy * S1peri_dx)
+S1peri_p.unscaled_200 <- sum(S1peri_yy[S1peri_xx >= 200]) * S1peri_dx
+S1peri_p.scaled_200 <- S1peri_p.unscaled_200 / C
+S1peri_p.unscaled_800 <- sum(S1peri_yy[S1peri_xx >= 800]) * S1peri_dx
+S1peri_p.scaled_800 <- S1peri_p.unscaled_800 / C
+AUC_S1peri_200to800 <- S1peri_p.scaled_200-S1peri_p.unscaled_800
+
+
+
+S2_d <- density.default(S2$Area, n = 2048, cut = 3)
+plot(S2_d); abline(v = 1, col = 2)
+S2_xx <- S2_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S2_dx <- S2_xx[2L] - S2_xx[1L]  ## spacing / bin size
+S2_yy <- S2_d$y  ## 512 density values for `xx`
+S2_C <- sum(S2_yy) * S2_dx  ## sum(S2_yy * S2_dx)
+S2_p.unscaled_5000 <- sum(S2_yy[S2_xx >= 5000]) * S2_dx
+S2_p.scaled_5000 <- S2_p.unscaled_5000 / C
+S2_p.unscaled_30000 <- sum(S2_yy[S2_xx >= 30000]) * S2_dx
+S2_p.scaled_30000 <- S2_p.unscaled_30000 / C
+AUC_S2area_5000to30000 <- S2_p.scaled_5000-S2_p.scaled_30000
+
+
+S2peri_d <- density.default(S2$Perimeter, n = 2048, cut = 3)
+plot(S2peri_d); abline(v = 1, col = 2)
+S2peri_xx <- S2peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S2peri_dx <- S2peri_xx[2L] - S2peri_xx[1L]  ## spacing / bin size
+S2peri_yy <- S2peri_d$y  ## 512 density values for `xx`
+S2peri_C <- sum(S2peri_yy) * S2peri_dx  ## sum(S2peri_yy * S2peri_dx)
+S2peri_p.unscaled_200 <- sum(S2peri_yy[S2peri_xx >= 200]) * S2peri_dx
+S2peri_p.scaled_200 <- S2peri_p.unscaled_200 / C
+S2peri_p.unscaled_800 <- sum(S2peri_yy[S2peri_xx >= 800]) * S2peri_dx
+S2peri_p.scaled_800 <- S2peri_p.unscaled_800 / C
+AUC_S2peri_200to800 <- S2peri_p.scaled_200-S2peri_p.unscaled_800
+
+S3_d <- density.default(S3$Area, n = 2048, cut = 3)
+plot(S3_d); abline(v = 1, col = 2)
+S3_xx <- S3_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S3_dx <- S3_xx[2L] - S3_xx[1L]  ## spacing / bin size
+S3_yy <- S3_d$y  ## 512 density values for `xx`
+S3_C <- sum(S3_yy) * S3_dx  ## sum(S3_yy * S3_dx)
+S3_p.unscaled_5000 <- sum(S3_yy[S3_xx >= 5000]) * S3_dx
+S3_p.scaled_5000 <- S3_p.unscaled_5000 / C
+S3_p.unscaled_30000 <- sum(S3_yy[S3_xx >= 30000]) * S3_dx
+S3_p.scaled_30000 <- S3_p.unscaled_30000 / C
+AUC_S3area_5000to30000 <- S3_p.scaled_5000-S3_p.scaled_30000
+
+S3peri_d <- density.default(S3$Perimeter, n = 2048, cut = 3)
+plot(S3peri_d); abline(v = 1, col = 2)
+S3peri_xx <- S3peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S3peri_dx <- S3peri_xx[2L] - S3peri_xx[1L]  ## spacing / bin size
+S3peri_yy <- S3peri_d$y  ## 512 density values for `xx`
+S3peri_C <- sum(S3peri_yy) * S3peri_dx  ## sum(S3peri_yy * S3peri_dx)
+S3peri_p.unscaled_200 <- sum(S3peri_yy[S3peri_xx >= 200]) * S3peri_dx
+S3peri_p.scaled_200 <- S3peri_p.unscaled_200 / C
+S3peri_p.unscaled_800 <- sum(S3peri_yy[S3peri_xx >= 800]) * S3peri_dx
+S3peri_p.scaled_800 <- S3peri_p.unscaled_800 / C
+AUC_S3peri_200to800 <- S3peri_p.scaled_200-S3peri_p.unscaled_800
+
+S4_d <- density.default(S4$Area, n = 2048, cut = 3)
+plot(S4_d); abline(v = 1, col = 2)
+S4_xx <- S4_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S4_dx <- S4_xx[2L] - S4_xx[1L]  ## spacing / bin size
+S4_yy <- S4_d$y  ## 512 density values for `xx`
+S4_C <- sum(S4_yy) * S4_dx  ## sum(S4_yy * S4_dx)
+S4_p.unscaled_5000 <- sum(S4_yy[S4_xx >= 5000]) * S4_dx
+S4_p.scaled_5000 <- S4_p.unscaled_5000 / C
+S4_p.unscaled_30000 <- sum(S4_yy[S4_xx >= 30000]) * S4_dx
+S4_p.scaled_30000 <- S4_p.unscaled_30000 / C
+AUC_S4area_5000to30000 <- S4_p.scaled_5000-S4_p.scaled_30000
+
+S4peri_d <- density.default(S4$Perimeter, n = 2048, cut = 3)
+plot(S4peri_d); abline(v = 1, col = 2)
+S4peri_xx <- S4peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S4peri_dx <- S4peri_xx[2L] - S4peri_xx[1L]  ## spacing / bin size
+S4peri_yy <- S4peri_d$y  ## 512 density values for `xx`
+S4peri_C <- sum(S4peri_yy) * S4peri_dx  ## sum(S4peri_yy * S4peri_dx)
+S4peri_p.unscaled_200 <- sum(S4peri_yy[S4peri_xx >= 200]) * S4peri_dx
+S4peri_p.scaled_200 <- S4peri_p.unscaled_200 / C
+S4peri_p.unscaled_800 <- sum(S4peri_yy[S4peri_xx >= 800]) * S4peri_dx
+S4peri_p.scaled_800 <- S4peri_p.unscaled_800 / C
+AUC_S4peri_200to800 <- S4peri_p.scaled_200-S4peri_p.unscaled_800
+
+S15_d <- density.default(S15$Area, n = 2048, cut = 3)
+plot(S15_d); abline(v = 1, col = 2)
+S15_xx <- S15_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S15_dx <- S15_xx[2L] - S15_xx[1L]  ## spacing / bin size
+S15_yy <- S15_d$y  ## 512 density values for `xx`
+S15_C <- sum(S15_yy) * S15_dx  ## sum(S15_yy * S15_dx)
+S15_p.unscaled_5000 <- sum(S15_yy[S15_xx >= 5000]) * S15_dx
+S15_p.scaled_5000 <- S15_p.unscaled_5000 / C
+S15_p.unscaled_30000 <- sum(S15_yy[S15_xx >= 30000]) * S15_dx
+S15_p.scaled_30000 <- S15_p.unscaled_30000 / C
+AUC_S15area_5000to30000 <- S15_p.scaled_5000-S15_p.scaled_30000
+
+S15peri_d <- density.default(S15$Perimeter, n = 2048, cut = 3)
+plot(S15peri_d); abline(v = 1, col = 2)
+S15peri_xx <- S15peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S15peri_dx <- S15peri_xx[2L] - S15peri_xx[1L]  ## spacing / bin size
+S15peri_yy <- S15peri_d$y  ## 512 density values for `xx`
+S15peri_C <- sum(S15peri_yy) * S15peri_dx  ## sum(S15peri_yy * S15peri_dx)
+S15peri_p.unscaled_200 <- sum(S15peri_yy[S15peri_xx >= 200]) * S15peri_dx
+S15peri_p.scaled_200 <- S15peri_p.unscaled_200 / C
+S15peri_p.unscaled_800 <- sum(S15peri_yy[S15peri_xx >= 800]) * S15peri_dx
+S15peri_p.scaled_800 <- S15peri_p.unscaled_800 / C
+AUC_S15peri_200to800 <- S15peri_p.scaled_200-S15peri_p.unscaled_800
+
+S17_d <- density.default(S17$Area, n = 2048, cut = 3)
+plot(S17_d); abline(v = 1, col = 2)
+S17_xx <- S17_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S17_dx <- S17_xx[2L] - S17_xx[1L]  ## spacing / bin size
+S17_yy <- S17_d$y  ## 512 density values for `xx`
+S17_C <- sum(S17_yy) * S17_dx  ## sum(S17_yy * S17_dx)
+S17_p.unscaled_5000 <- sum(S17_yy[S17_xx >= 5000]) * S17_dx
+S17_p.scaled_5000 <- S17_p.unscaled_5000 / C
+S17_p.unscaled_30000 <- sum(S17_yy[S17_xx >= 30000]) * S17_dx
+S17_p.scaled_30000 <- S17_p.unscaled_30000 / C
+AUC_S17area_5000to30000 <- S17_p.scaled_5000-S17_p.scaled_30000
+
+S17peri_d <- density.default(S17$Perimeter, n = 2048, cut = 3)
+plot(S17peri_d); abline(v = 1, col = 2)
+S17peri_xx <- S17peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S17peri_dx <- S17peri_xx[2L] - S17peri_xx[1L]  ## spacing / bin size
+S17peri_yy <- S17peri_d$y  ## 512 density values for `xx`
+S17peri_C <- sum(S17peri_yy) * S17peri_dx  ## sum(S17peri_yy * S17peri_dx)
+S17peri_p.unscaled_200 <- sum(S17peri_yy[S17peri_xx >= 200]) * S17peri_dx
+S17peri_p.scaled_200 <- S17peri_p.unscaled_200 / C
+S17peri_p.unscaled_800 <- sum(S17peri_yy[S17peri_xx >= 800]) * S17peri_dx
+S17peri_p.scaled_800 <- S17peri_p.unscaled_800 / C
+AUC_S17peri_200to800 <- S17peri_p.scaled_200-S17peri_p.unscaled_800
+
+S23_d <- density.default(S23$Area, n = 2048, cut = 3)
+plot(S23_d); abline(v = 1, col = 2)
+S23_xx <- S23_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S23_dx <- S23_xx[2L] - S23_xx[1L]  ## spacing / bin size
+S23_yy <- S23_d$y  ## 512 density values for `xx`
+S23_C <- sum(S23_yy) * S23_dx  ## sum(S23_yy * S23_dx)
+S23_p.unscaled_5000 <- sum(S23_yy[S23_xx >= 5000]) * S23_dx
+S23_p.scaled_5000 <- S23_p.unscaled_5000 / C
+S23_p.unscaled_30000 <- sum(S23_yy[S23_xx >= 30000]) * S23_dx
+S23_p.scaled_30000 <- S23_p.unscaled_30000 / C
+AUC_S23area_5000to30000 <- S23_p.scaled_5000-S23_p.scaled_30000
+
+S23peri_d <- density.default(S23$Perimeter, n = 2048, cut = 3)
+plot(S23peri_d); abline(v = 1, col = 2)
+S23peri_xx <- S23peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S23peri_dx <- S23peri_xx[2L] - S23peri_xx[1L]  ## spacing / bin size
+S23peri_yy <- S23peri_d$y  ## 512 density values for `xx`
+S23peri_C <- sum(S23peri_yy) * S23peri_dx  ## sum(S23peri_yy * S23peri_dx)
+S23peri_p.unscaled_200 <- sum(S23peri_yy[S23peri_xx >= 200]) * S23peri_dx
+S23peri_p.scaled_200 <- S23peri_p.unscaled_200 / C
+S23peri_p.unscaled_800 <- sum(S23peri_yy[S23peri_xx >= 800]) * S23peri_dx
+S23peri_p.scaled_800 <- S23peri_p.unscaled_800 / C
+AUC_S23peri_200to800 <- S23peri_p.scaled_200-S23peri_p.unscaled_800
+
+S24_d <- density.default(S24$Area, n = 2048, cut = 3)
+plot(S24_d); abline(v = 1, col = 2)
+S24_xx <- S24_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S24_dx <- S24_xx[2L] - S24_xx[1L]  ## spacing / bin size
+S24_yy <- S24_d$y  ## 512 density values for `xx`
+S24_C <- sum(S24_yy) * S24_dx  ## sum(S24_yy * S24_dx)
+S24_p.unscaled_5000 <- sum(S24_yy[S24_xx >= 5000]) * S24_dx
+S24_p.scaled_5000 <- S24_p.unscaled_5000 / C
+S24_p.unscaled_30000 <- sum(S24_yy[S24_xx >= 30000]) * S24_dx
+S24_p.scaled_30000 <- S24_p.unscaled_30000 / C
+AUC_S24area_5000to30000 <- S24_p.scaled_5000-S24_p.scaled_30000
+
+S24peri_d <- density.default(S24$Perimeter, n = 2048, cut = 3)
+plot(S24peri_d); abline(v = 1, col = 2)
+S24peri_xx <- S24peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S24peri_dx <- S24peri_xx[2L] - S24peri_xx[1L]  ## spacing / bin size
+S24peri_yy <- S24peri_d$y  ## 512 density values for `xx`
+S24peri_C <- sum(S24peri_yy) * S24peri_dx  ## sum(S24peri_yy * S24peri_dx)
+S24peri_p.unscaled_200 <- sum(S24peri_yy[S24peri_xx >= 200]) * S24peri_dx
+S24peri_p.scaled_200 <- S24peri_p.unscaled_200 / C
+S24peri_p.unscaled_800 <- sum(S24peri_yy[S24peri_xx >= 800]) * S24peri_dx
+S24peri_p.scaled_800 <- S24peri_p.unscaled_800 / C
+AUC_S24peri_200to800 <- S24peri_p.scaled_200-S24peri_p.unscaled_800
+
+S31_d <- density.default(S31$Area, n = 2048, cut = 3)
+plot(S31_d); abline(v = 1, col = 2)
+S31_xx <- S31_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S31_dx <- S31_xx[2L] - S31_xx[1L]  ## spacing / bin size
+S31_yy <- S31_d$y  ## 512 density values for `xx`
+S31_C <- sum(S31_yy) * S31_dx  ## sum(S31_yy * S31_dx)
+S31_p.unscaled_5000 <- sum(S31_yy[S31_xx >= 5000]) * S31_dx
+S31_p.scaled_5000 <- S31_p.unscaled_5000 / C
+S31_p.unscaled_30000 <- sum(S31_yy[S31_xx >= 30000]) * S31_dx
+S31_p.scaled_30000 <- S31_p.unscaled_30000 / C
+AUC_S31area_5000to30000 <- S31_p.scaled_5000-S31_p.scaled_30000
+
+S31peri_d <- density.default(S31$Perimeter, n = 2048, cut = 3)
+plot(S31peri_d); abline(v = 1, col = 2)
+S31peri_xx <- S31peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S31peri_dx <- S31peri_xx[2L] - S31peri_xx[1L]  ## spacing / bin size
+S31peri_yy <- S31peri_d$y  ## 512 density values for `xx`
+S31peri_C <- sum(S31peri_yy) * S31peri_dx  ## sum(S31peri_yy * S31peri_dx)
+S31peri_p.unscaled_200 <- sum(S31peri_yy[S31peri_xx >= 200]) * S31peri_dx
+S31peri_p.scaled_200 <- S31peri_p.unscaled_200 / C
+S31peri_p.unscaled_800 <- sum(S31peri_yy[S31peri_xx >= 800]) * S31peri_dx
+S31peri_p.scaled_800 <- S31peri_p.unscaled_800 / C
+AUC_S31peri_200to800 <- S31peri_p.scaled_200-S31peri_p.unscaled_800
+
+S32_d <- density.default(S32$Area, n = 2048, cut = 3)
+plot(S32_d); abline(v = 1, col = 2)
+S32_xx <- S32_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S32_dx <- S32_xx[2L] - S32_xx[1L]  ## spacing / bin size
+S32_yy <- S32_d$y  ## 512 density values for `xx`
+S32_C <- sum(S32_yy) * S32_dx  ## sum(S32_yy * S32_dx)
+S32_p.unscaled_5000 <- sum(S32_yy[S32_xx >= 5000]) * S32_dx
+S32_p.scaled_5000 <- S32_p.unscaled_5000 / C
+S32_p.unscaled_30000 <- sum(S32_yy[S32_xx >= 30000]) * S32_dx
+S32_p.scaled_30000 <- S32_p.unscaled_30000 / C
+AUC_S32area_5000to30000 <- S32_p.scaled_5000-S32_p.scaled_30000
+
+S32peri_d <- density.default(S32$Perimeter, n = 2048, cut = 3)
+plot(S32peri_d); abline(v = 1, col = 2)
+S32peri_xx <- S32peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S32peri_dx <- S32peri_xx[2L] - S32peri_xx[1L]  ## spacing / bin size
+S32peri_yy <- S32peri_d$y  ## 512 density values for `xx`
+S32peri_C <- sum(S32peri_yy) * S32peri_dx  ## sum(S32peri_yy * S32peri_dx)
+S32peri_p.unscaled_200 <- sum(S32peri_yy[S32peri_xx >= 200]) * S32peri_dx
+S32peri_p.scaled_200 <- S32peri_p.unscaled_200 / C
+S32peri_p.unscaled_800 <- sum(S32peri_yy[S32peri_xx >= 800]) * S32peri_dx
+S32peri_p.scaled_800 <- S32peri_p.unscaled_800 / C
+AUC_S32peri_200to800 <- S32peri_p.scaled_200-S32peri_p.unscaled_800
+
+S37_d <- density.default(S37$Area, n = 2048, cut = 3)
+plot(S37_d); abline(v = 1, col = 2)
+S37_xx <- S37_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S37_dx <- S37_xx[2L] - S37_xx[1L]  ## spacing / bin size
+S37_yy <- S37_d$y  ## 512 density values for `xx`
+S37_C <- sum(S37_yy) * S37_dx  ## sum(S37_yy * S37_dx)
+S37_p.unscaled_5000 <- sum(S37_yy[S37_xx >= 5000]) * S37_dx
+S37_p.scaled_5000 <- S37_p.unscaled_5000 / C
+S37_p.unscaled_30000 <- sum(S37_yy[S37_xx >= 30000]) * S37_dx
+S37_p.scaled_30000 <- S37_p.unscaled_30000 / C
+AUC_S37area_5000to30000 <- S37_p.scaled_5000-S37_p.scaled_30000
+
+S37peri_d <- density.default(S37$Perimeter, n = 2048, cut = 3)
+plot(S37peri_d); abline(v = 1, col = 2)
+S37peri_xx <- S37peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S37peri_dx <- S37peri_xx[2L] - S37peri_xx[1L]  ## spacing / bin size
+S37peri_yy <- S37peri_d$y  ## 512 density values for `xx`
+S37peri_C <- sum(S37peri_yy) * S37peri_dx  ## sum(S37peri_yy * S37peri_dx)
+S37peri_p.unscaled_200 <- sum(S37peri_yy[S37peri_xx >= 200]) * S37peri_dx
+S37peri_p.scaled_200 <- S37peri_p.unscaled_200 / C
+S37peri_p.unscaled_800 <- sum(S37peri_yy[S37peri_xx >= 800]) * S37peri_dx
+S37peri_p.scaled_800 <- S37peri_p.unscaled_800 / C
+AUC_S37peri_200to800 <- S37peri_p.scaled_200-S37peri_p.unscaled_800
+
+S38_d <- density.default(S38$Area, n = 2048, cut = 3)
+plot(S38_d); abline(v = 1, col = 2)
+S38_xx <- S38_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S38_dx <- S38_xx[2L] - S38_xx[1L]  ## spacing / bin size
+S38_yy <- S38_d$y  ## 512 density values for `xx`
+S38_C <- sum(S38_yy) * S38_dx  ## sum(S38_yy * S38_dx)
+S38_p.unscaled_5000 <- sum(S38_yy[S38_xx >= 5000]) * S38_dx
+S38_p.scaled_5000 <- S38_p.unscaled_5000 / C
+S38_p.unscaled_30000 <- sum(S38_yy[S38_xx >= 30000]) * S38_dx
+S38_p.scaled_30000 <- S38_p.unscaled_30000 / C
+AUC_S38area_5000to30000 <- S38_p.scaled_5000-S38_p.scaled_30000
+
+S38peri_d <- density.default(S38$Perimeter, n = 2048, cut = 3)
+plot(S38peri_d); abline(v = 1, col = 2)
+S38peri_xx <- S38peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S38peri_dx <- S38peri_xx[2L] - S38peri_xx[1L]  ## spacing / bin size
+S38peri_yy <- S38peri_d$y  ## 512 density values for `xx`
+S38peri_C <- sum(S38peri_yy) * S38peri_dx  ## sum(S38peri_yy * S38peri_dx)
+S38peri_p.unscaled_200 <- sum(S38peri_yy[S38peri_xx >= 200]) * S38peri_dx
+S38peri_p.scaled_200 <- S38peri_p.unscaled_200 / C
+S38peri_p.unscaled_800 <- sum(S38peri_yy[S38peri_xx >= 800]) * S38peri_dx
+S38peri_p.scaled_800 <- S38peri_p.unscaled_800 / C
+AUC_S38peri_200to800 <- S38peri_p.scaled_200-S38peri_p.unscaled_800
+
+S41_d <- density.default(S41$Area, n = 2048, cut = 3)
+plot(S41_d); abline(v = 1, col = 2)
+S41_xx <- S41_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S41_dx <- S41_xx[2L] - S41_xx[1L]  ## spacing / bin size
+S41_yy <- S41_d$y  ## 512 density values for `xx`
+S41_C <- sum(S41_yy) * S41_dx  ## sum(S41_yy * S41_dx)
+S41_p.unscaled_5000 <- sum(S41_yy[S41_xx >= 5000]) * S41_dx
+S41_p.scaled_5000 <- S41_p.unscaled_5000 / C
+S41_p.unscaled_30000 <- sum(S41_yy[S41_xx >= 30000]) * S41_dx
+S41_p.scaled_30000 <- S41_p.unscaled_30000 / C
+AUC_S41area_5000to30000 <- S41_p.scaled_5000-S41_p.scaled_30000
+
+S41peri_d <- density.default(S41$Perimeter, n = 2048, cut = 3)
+plot(S41peri_d); abline(v = 1, col = 2)
+S41peri_xx <- S41peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S41peri_dx <- S41peri_xx[2L] - S41peri_xx[1L]  ## spacing / bin size
+S41peri_yy <- S41peri_d$y  ## 512 density values for `xx`
+S41peri_C <- sum(S41peri_yy) * S41peri_dx  ## sum(S41peri_yy * S41peri_dx)
+S41peri_p.unscaled_200 <- sum(S41peri_yy[S41peri_xx >= 200]) * S41peri_dx
+S41peri_p.scaled_200 <- S41peri_p.unscaled_200 / C
+S41peri_p.unscaled_800 <- sum(S41peri_yy[S41peri_xx >= 800]) * S41peri_dx
+S41peri_p.scaled_800 <- S41peri_p.unscaled_800 / C
+AUC_S41peri_200to800 <- S41peri_p.scaled_200-S41peri_p.unscaled_800
+
+S42_d <- density.default(S42$Area, n = 2048, cut = 3)
+plot(S42_d); abline(v = 1, col = 2)
+S42_xx <- S42_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S42_dx <- S42_xx[2L] - S42_xx[1L]  ## spacing / bin size
+S42_yy <- S42_d$y  ## 512 density values for `xx`
+S42_C <- sum(S42_yy) * S42_dx  ## sum(S42_yy * S42_dx)
+S42_p.unscaled_5000 <- sum(S42_yy[S42_xx >= 5000]) * S42_dx
+S42_p.scaled_5000 <- S42_p.unscaled_5000 / C
+S42_p.unscaled_30000 <- sum(S42_yy[S42_xx >= 30000]) * S42_dx
+S42_p.scaled_30000 <- S42_p.unscaled_30000 / C
+AUC_S42area_5000to30000 <- S42_p.scaled_5000-S42_p.scaled_30000
+
+S42peri_d <- density.default(S42$Perimeter, n = 2048, cut = 3)
+plot(S42peri_d); abline(v = 1, col = 2)
+S42peri_xx <- S42peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S42peri_dx <- S42peri_xx[2L] - S42peri_xx[1L]  ## spacing / bin size
+S42peri_yy <- S42peri_d$y  ## 512 density values for `xx`
+S42peri_C <- sum(S42peri_yy) * S42peri_dx  ## sum(S42peri_yy * S42peri_dx)
+S42peri_p.unscaled_200 <- sum(S42peri_yy[S42peri_xx >= 200]) * S42peri_dx
+S42peri_p.scaled_200 <- S42peri_p.unscaled_200 / C
+S42peri_p.unscaled_800 <- sum(S42peri_yy[S42peri_xx >= 800]) * S42peri_dx
+S42peri_p.scaled_800 <- S42peri_p.unscaled_800 / C
+AUC_S42peri_200to800 <- S42peri_p.scaled_200-S42peri_p.unscaled_800
+
+S43_d <- density.default(S43$Area, n = 2048, cut = 3)
+plot(S43_d); abline(v = 1, col = 2)
+S43_xx <- S43_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S43_dx <- S43_xx[2L] - S43_xx[1L]  ## spacing / bin size
+S43_yy <- S43_d$y  ## 512 density values for `xx`
+S43_C <- sum(S43_yy) * S43_dx  ## sum(S43_yy * S43_dx)
+S43_p.unscaled_5000 <- sum(S43_yy[S43_xx >= 5000]) * S43_dx
+S43_p.scaled_5000 <- S43_p.unscaled_5000 / C
+S43_p.unscaled_30000 <- sum(S43_yy[S43_xx >= 30000]) * S43_dx
+S43_p.scaled_30000 <- S43_p.unscaled_30000 / C
+AUC_S43area_5000to30000 <- S43_p.scaled_5000-S43_p.scaled_30000
+
+S43peri_d <- density.default(S43$Perimeter, n = 2048, cut = 3)
+plot(S43peri_d); abline(v = 1, col = 2)
+S43peri_xx <- S43peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S43peri_dx <- S43peri_xx[2L] - S43peri_xx[1L]  ## spacing / bin size
+S43peri_yy <- S43peri_d$y  ## 512 density values for `xx`
+S43peri_C <- sum(S43peri_yy) * S43peri_dx  ## sum(S43peri_yy * S43peri_dx)
+S43peri_p.unscaled_200 <- sum(S43peri_yy[S43peri_xx >= 200]) * S43peri_dx
+S43peri_p.scaled_200 <- S43peri_p.unscaled_200 / C
+S43peri_p.unscaled_800 <- sum(S43peri_yy[S43peri_xx >= 800]) * S43peri_dx
+S43peri_p.scaled_800 <- S43peri_p.unscaled_800 / C
+AUC_S43peri_200to800 <- S43peri_p.scaled_200-S43peri_p.unscaled_800
+
+S44_d <- density.default(S44$Area, n = 2048, cut = 3)
+plot(S44_d); abline(v = 1, col = 2)
+S44_xx <- S44_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S44_dx <- S44_xx[2L] - S44_xx[1L]  ## spacing / bin size
+S44_yy <- S44_d$y  ## 512 density values for `xx`
+S44_C <- sum(S44_yy) * S44_dx  ## sum(S44_yy * S44_dx)
+S44_p.unscaled_5000 <- sum(S44_yy[S44_xx >= 5000]) * S44_dx
+S44_p.scaled_5000 <- S44_p.unscaled_5000 / C
+S44_p.unscaled_30000 <- sum(S44_yy[S44_xx >= 30000]) * S44_dx
+S44_p.scaled_30000 <- S44_p.unscaled_30000 / C
+AUC_S44area_5000to30000 <- S44_p.scaled_5000-S44_p.scaled_30000
+
+S44peri_d <- density.default(S44$Perimeter, n = 2048, cut = 3)
+plot(S44peri_d); abline(v = 1, col = 2)
+S44peri_xx <- S44peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S44peri_dx <- S44peri_xx[2L] - S44peri_xx[1L]  ## spacing / bin size
+S44peri_yy <- S44peri_d$y  ## 512 density values for `xx`
+S44peri_C <- sum(S44peri_yy) * S44peri_dx  ## sum(S44peri_yy * S44peri_dx)
+S44peri_p.unscaled_200 <- sum(S44peri_yy[S44peri_xx >= 200]) * S44peri_dx
+S44peri_p.scaled_200 <- S44peri_p.unscaled_200 / C
+S44peri_p.unscaled_800 <- sum(S44peri_yy[S44peri_xx >= 800]) * S44peri_dx
+S44peri_p.scaled_800 <- S44peri_p.unscaled_800 / C
+AUC_S44peri_200to800 <- S44peri_p.scaled_200-S44peri_p.unscaled_800
+
+S45_d <- density.default(S45$Area, n = 2048, cut = 3)
+plot(S45_d); abline(v = 1, col = 2)
+S45_xx <- S45_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S45_dx <- S45_xx[2L] - S45_xx[1L]  ## spacing / bin size
+S45_yy <- S45_d$y  ## 512 density values for `xx`
+S45_C <- sum(S45_yy) * S45_dx  ## sum(S45_yy * S45_dx)
+S45_p.unscaled_5000 <- sum(S45_yy[S45_xx >= 5000]) * S45_dx
+S45_p.scaled_5000 <- S45_p.unscaled_5000 / C
+S45_p.unscaled_30000 <- sum(S45_yy[S45_xx >= 30000]) * S45_dx
+S45_p.scaled_30000 <- S45_p.unscaled_30000 / C
+AUC_S45area_5000to30000 <- S45_p.scaled_5000-S45_p.scaled_30000
+
+S45peri_d <- density.default(S45$Perimeter, n = 2048, cut = 3)
+plot(S45peri_d); abline(v = 1, col = 2)
+S45peri_xx <- S45peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S45peri_dx <- S45peri_xx[2L] - S45peri_xx[1L]  ## spacing / bin size
+S45peri_yy <- S45peri_d$y  ## 512 density values for `xx`
+S45peri_C <- sum(S45peri_yy) * S45peri_dx  ## sum(S45peri_yy * S45peri_dx)
+S45peri_p.unscaled_200 <- sum(S45peri_yy[S45peri_xx >= 200]) * S45peri_dx
+S45peri_p.scaled_200 <- S45peri_p.unscaled_200 / C
+S45peri_p.unscaled_800 <- sum(S45peri_yy[S45peri_xx >= 800]) * S45peri_dx
+S45peri_p.scaled_800 <- S45peri_p.unscaled_800 / C
+AUC_S45peri_200to800 <- S45peri_p.scaled_200-S45peri_p.unscaled_800
+
+S46_d <- density.default(S46$Area, n = 2048, cut = 3)
+plot(S46_d); abline(v = 1, col = 2)
+S46_xx <- S46_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S46_dx <- S46_xx[2L] - S46_xx[1L]  ## spacing / bin size
+S46_yy <- S46_d$y  ## 512 density values for `xx`
+S46_C <- sum(S46_yy) * S46_dx  ## sum(S46_yy * S46_dx)
+S46_p.unscaled_5000 <- sum(S46_yy[S46_xx >= 5000]) * S46_dx
+S46_p.scaled_5000 <- S46_p.unscaled_5000 / C
+S46_p.unscaled_30000 <- sum(S46_yy[S46_xx >= 30000]) * S46_dx
+S46_p.scaled_30000 <- S46_p.unscaled_30000 / C
+AUC_S46area_5000to30000 <- S46_p.scaled_5000-S46_p.scaled_30000
+
+S46peri_d <- density.default(S46$Perimeter, n = 2048, cut = 3)
+plot(S46peri_d); abline(v = 1, col = 2)
+S46peri_xx <- S46peri_d$x  ## 512 evenly spaced points on [min(x) - 3 * d$bw, max(x) + 3 * d$bw]
+S46peri_dx <- S46peri_xx[2L] - S46peri_xx[1L]  ## spacing / bin size
+S46peri_yy <- S46peri_d$y  ## 512 density values for `xx`
+S46peri_C <- sum(S46peri_yy) * S46peri_dx  ## sum(S46peri_yy * S46peri_dx)
+S46peri_p.unscaled_200 <- sum(S46peri_yy[S46peri_xx >= 200]) * S46peri_dx
+S46peri_p.scaled_200 <- S46peri_p.unscaled_200 / C
+S46peri_p.unscaled_800 <- sum(S46peri_yy[S46peri_xx >= 800]) * S46peri_dx
+S46peri_p.scaled_800 <- S46peri_p.unscaled_800 / C
+AUC_S46peri_200to800 <- S46peri_p.scaled_200-S46peri_p.unscaled_800
+
+
+---boxplot----
+
+lot(data = data_peri, aes(x = Organoids, y = Area)) +geom_boxplot(alpha = 1) + ylim(0,35000) +
+    geom_jitter(alpha = 0.3, color = "tomato")
+
+

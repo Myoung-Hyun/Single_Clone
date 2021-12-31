@@ -1,0 +1,22 @@
+
+Normal.bam
+Tumor.bam
+
+
+SureSelect .V6 bed file download (Github/Astrazeneca), <- annotated!
+
+python3 cnvkit.py antitarget V6.bed -g data/access-5kb-mappable.hg19.bed -o V6_antitargets.bed
+
+hg19.fa (fasta file, reference genome)
+
+python3 cnvkit.py coverage 4351NT.bam V6.bed -o 4351NT.targetcoverage.cnn
+
+python3 cnvkit.py reference *4351NT.targetcoverage.cnn --fasta hg19.fa -o 4351_reference.cnn
+
+python3 cnvkit.py batch *4351CT.bam -r 4351_reference.cnn -d results/
+
+python3 cnvkit.py segment *4351CT.cnr -o 4351CT.cns 
+
+python3 cnvkit.py fix 4351CT.targetcoverage.cnn 4351CT.antitargetcoverage.cnn 4351NT_Ref.cnn -o 4351CT.cnr
+
+python3 cnvkit.py heatmap sample1.cns sample2.cns ... sampleN.cns -d
